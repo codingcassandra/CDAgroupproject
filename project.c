@@ -51,6 +51,7 @@ void sign_extend(unsigned offset,unsigned *extended_value)
 
 /* ALU operations */
 /* 10 Points */
+// Adds the operations of an ALU
 int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigned funct,char ALUOp,char ALUSrc,unsigned *ALUresult,char *Zero)
 {
 
@@ -107,8 +108,10 @@ int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigne
 
 /* Read / Write Memory */
 /* 10 Points */
+// determines whether a memwrite or a memread operation is occurring
 int rw_memory(unsigned ALUresult,unsigned data2,char MemWrite,char MemRead,unsigned *memdata,unsigned *Mem)
 {
+// 
 if(MemWrite == 1){
       if((ALUresult % 4) == 0) Mem[ALUresult >> 2] = data2; else return 1;
   }
