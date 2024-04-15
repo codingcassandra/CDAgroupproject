@@ -117,12 +117,18 @@ int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigne
 int rw_memory(unsigned ALUresult,unsigned data2,char MemWrite,char MemRead,unsigned *memdata,unsigned *Mem)
 {
 // 
-if(MemWrite == 1){
-      if((ALUresult % 4) == 0) Mem[ALUresult >> 2] = data2; else return 1;
-  }
+if(MemWrite == 1)
+{
+      if((ALUresult % 4) == 0) 
+         Mem[ALUresult >> 2] = data2; 
+      else return 1;
+}
 
-  if(MemRead == 1){
-      if((ALUresult % 4) == 0) *memdata = Mem[ALUresult >> 2]; else return 1;
+  if(MemRead == 1)
+  {
+      if((ALUresult % 4) == 0) 
+         *memdata = Mem[ALUresult >> 2]; 
+      else return 1;
   }
 
   return 0;
