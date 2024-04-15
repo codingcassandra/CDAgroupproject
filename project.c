@@ -1,3 +1,7 @@
+// Kevin Zheng, Cassandra Morales, Matthew Arroyave
+// CDA 3103
+// 4/21/24
+// Dr. Ozdag
 #include "spimcore.h"
 
 
