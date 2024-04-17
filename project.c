@@ -69,14 +69,17 @@ void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
 
 /* instruction fetch */
 /* 10 Points */
+// grabs info from PC and writes it to instruction
 int instruction_fetch(unsigned PC,unsigned *Mem,unsigned *instruction)
 {
+// checks if PC is 4-byte
    if(PC % 4 != 0)
     {
         return 1;
     }
     else
     {
+// shifts the PC by 2 bits
         *instruction = Mem[PC >> 2];
         return 0;
     }
@@ -85,25 +88,28 @@ int instruction_fetch(unsigned PC,unsigned *Mem,unsigned *instruction)
 
 /* instruction partition */
 /* 10 Points */
+// masks bits and shifts them into position
 void instruction_partition(unsigned instruction, unsigned *op, unsigned *r1,unsigned *r2, unsigned *r3, unsigned *funct, unsigned *offset, unsigned *jsec)
 {
+// shift by 26 bits
    *op = (instruction & 0xfc000000) >> 26;
 
-  // 0000 0011 1110 0000 0000 0000 0000 0000 --> instruction [25-21]
+// shift by 21 bits
     *r1 = (instruction & 0x03e00000) >> 21;
 
-  // 0000 0000 0001 1111 0000 0000 0000 0000 --> instruction [20-16]
+// shift by 16 bits
     *r2 = (instruction & 0x001f0000) >> 16;
 
-  // 0000 0000 0000 0000 1111 1000 0000 0000 --> instruction [15-11]
+// shift by 11
     *r3 = (instruction & 0x0000f800) >> 11;
 
-  // 0000 0000 0000 0000 0000 0000 0011 1111 --> instruction [5-0]
+// masking
     *funct = instruction & 0x0000003f;
-
+	
+// masking
     *offset = instruction & 0x0000ffff;
 
-  // 0000 0011 1111 1111 1111 1111 1111 1111 --> instruction [25-0]
+// masking
     *jsec = instruction & 0x03ffffff;
 }
 
@@ -111,9 +117,10 @@ void instruction_partition(unsigned instruction, unsigned *op, unsigned *r1,unsi
 
 /* instruction decode */
 /* 15 Points */
+// assigns control signals to variables
 int instruction_decode(unsigned op,struct_controls *controls)
 {
-   controls->RegDst = 0;
+   	controls->RegDst = 0;
 	controls->Jump = 0;
 	controls->Branch = 0;
 	controls->MemRead = 0;
