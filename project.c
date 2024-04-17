@@ -120,6 +120,7 @@ void instruction_partition(unsigned instruction, unsigned *op, unsigned *r1,unsi
 // assigns control signals to variables
 int instruction_decode(unsigned op,struct_controls *controls)
 {
+// starts all the controls at 0
    	controls->RegDst = 0;
 	controls->Jump = 0;
 	controls->Branch = 0;
@@ -130,6 +131,7 @@ int instruction_decode(unsigned op,struct_controls *controls)
 	controls->ALUSrc = 0;
 	controls->RegWrite = 0;
 
+// changes control values according to op value
     if (op == 0x0)
     {
         controls->RegDst = 1;
@@ -137,67 +139,58 @@ int instruction_decode(unsigned op,struct_controls *controls)
         controls->RegWrite = 1;
     }
 
-    // Add immediate --> 0000 1000
     else if (op == 0x8)
     {    
         controls->RegWrite = 1;
         controls->ALUSrc = 1;
     }
-    // Load word (lw) --> 0010 0011
-    if (op == 0x23)
+	
+    else if (op == 0x23)
     {
         controls->RegWrite = 1;
         controls->MemRead = 1;
         controls->MemtoReg = 1;
         controls->ALUSrc = 1;
     }
-    // Store word (sw) --> 0010 1011
+
     else if (op == 0x2b)
     {
         controls->MemWrite = 1;
-        controls->RegDst = 2; // ?
-        controls->MemtoReg = 2; // ?
+        controls->RegDst = 2;
+        controls->MemtoReg = 2; 
         controls->ALUSrc = 1;
     }
-    // Load upper immediate (lui) --> 0000 1111
+
     else if(op == 0xf)
     {
         controls->RegWrite = 1;
-      // Requires upper 16 bits, so set ALU operation to shift
         controls->ALUOp = 6;
         controls->ALUSrc = 1;
     }
-    // Branch on equal (beq) --> 0000 0100
+
     else if (op == 0x4)
     {
-     // PC updates for branch to multiplexer path 1
         controls->Branch = 1;
         controls->RegDst = 2;
         controls->MemtoReg = 2;
-        controls->ALUSrc = 1; // 2? 0?
-      // Branching requires subtraction
+        controls->ALUSrc = 1; 
         controls->ALUOp = 1;
     }
 
-    // Set less than immediate (slti) --> 0000 1010
     else if (op == 0xa)
     {
-        // Set ALU operation for 'set less than'
         controls->ALUOp = 2;
         controls->RegWrite = 1;
         controls->ALUSrc = 1;
     }
 
-    // Set less than immediate unsigned (sltiu) --> 0000 1011
     else if (op == 0xb)
     {
-         // Set ALU operation for 'set less than unsigned'
         controls->ALUOp = 3;
         controls->RegWrite = 1;
         controls->ALUSrc = 1;
     }
 
-    // Jump (j) --> 0000 0010
     else if (op == 0x2)
     {
         controls->Jump = 1;
@@ -207,28 +200,28 @@ int instruction_decode(unsigned op,struct_controls *controls)
         controls->ALUSrc = 2;
         controls->ALUOp = 2;
     }
-
-    // If none of the cases apply, halt condition occurs, so return 1
+	    
+// when none of the cases fit
     else
     {
         return 1;
     }
   
-  // No halt condition = successful encoding
-    return 0;
+return 0;
 }
 
 /* Read Register */
 /* 5 Points */
+// moves the data from r1/r2 into data1/data2
 void read_register(unsigned r1,unsigned r2,unsigned *Reg,unsigned *data1,unsigned *data2)
 {
     *data1 = Reg[r1];
     *data2 = Reg[r2];
 }
 
-
 /* Sign Extend */
 /* 10 Points */
+// extends the ones value to 32 bit
 void sign_extend(unsigned offset,unsigned *extended_value)
 {
     int ones = 0xffff << 16;
