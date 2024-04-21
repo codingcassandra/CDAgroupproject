@@ -318,13 +318,18 @@ if(MemWrite == 1)
 
 /* Write Register */
 /* 10 Points */
+// determines what will be written into the r2 and r3 registers 
 void write_register(unsigned r2,unsigned r3,unsigned memdata,unsigned ALUresult,char RegWrite,char RegDst,char MemtoReg,unsigned *Reg)
 {
-
-  if(MemtoReg == 1 && RegDst == 0 && RegWrite == 1){
+// conditions to determin whether to write data to register
+  if(MemtoReg == 1 && RegDst == 0 && RegWrite == 1)
+  {
+// if conditions are met, data is written into register
         Reg[r2] = memdata;
   }
-  else if(MemtoReg == 0 && RegDst == 1 &&  RegWrite == 1){
+  else if(MemtoReg == 0 && RegDst == 1 &&  RegWrite == 1)
+  {
+// if conditions are not met, then the ALUresult is written into the register
         Reg[r3] = ALUresult;
   }
   
@@ -332,10 +337,14 @@ void write_register(unsigned r2,unsigned r3,unsigned memdata,unsigned ALUresult,
 
 /* PC update */
 /* 10 Points */
+// updates the counter based on the control signals 
 void PC_update(unsigned jsec,unsigned extended_value,char Branch,char Jump,char Zero,unsigned *PC)
 {
+// icrements the counter by 4
   *PC += 4;
+// if there is a jump instruction, the address will be shifted by 2 to the left to align with sig bits
   if(Jump == 1) *PC = (jsec << 2) | (*PC & 0xf0000000);
+// shifts the extended_value left by 2 
   if(Zero == 1 && Branch == 1) *PC += extended_value << 2;
 }
 
