@@ -8,6 +8,7 @@
 
 /* ALU */
 /* 10 Points */
+// Implement the operations on input parameters A and B according to ALU controls
 void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
 {
     if (ALUControl == 0x0)
