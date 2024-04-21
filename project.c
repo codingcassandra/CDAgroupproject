@@ -133,65 +133,14 @@ int instruction_decode(unsigned op,struct_controls *controls)
 	controls->RegWrite = 0;
 
 // changes control values according to op value
+    // R-Type
     if (op == 0x0)
     {
         controls->RegDst = 1;
         controls->ALUOp = 7;
         controls->RegWrite = 1;
     }
-
-    else if (op == 0x8)
-    {    
-        controls->RegWrite = 1;
-        controls->ALUSrc = 1;
-    }
-	
-    else if (op == 0x23)
-    {
-        controls->RegWrite = 1;
-        controls->MemRead = 1;
-        controls->MemtoReg = 1;
-        controls->ALUSrc = 1;
-    }
-
-    else if (op == 0x2b)
-    {
-        controls->MemWrite = 1;
-        controls->RegDst = 2;
-        controls->MemtoReg = 2; 
-        controls->ALUSrc = 1;
-    }
-
-    else if(op == 0xf)
-    {
-        controls->RegWrite = 1;
-        controls->ALUOp = 6;
-        controls->ALUSrc = 1;
-    }
-
-    else if (op == 0x4)
-    {
-        controls->Branch = 1;
-        controls->RegDst = 2;
-        controls->MemtoReg = 2;
-        controls->ALUSrc = 1; 
-        controls->ALUOp = 1;
-    }
-
-    else if (op == 0xa)
-    {
-        controls->ALUOp = 2;
-        controls->RegWrite = 1;
-        controls->ALUSrc = 1;
-    }
-
-    else if (op == 0xb)
-    {
-        controls->ALUOp = 3;
-        controls->RegWrite = 1;
-        controls->ALUSrc = 1;
-    }
-
+    // j
     else if (op == 0x2)
     {
         controls->Jump = 1;
@@ -200,6 +149,58 @@ int instruction_decode(unsigned op,struct_controls *controls)
         controls->MemtoReg = 2;
         controls->ALUSrc = 2;
         controls->ALUOp = 2;
+    }
+    // beq
+    else if (op == 0x4)
+    {
+        controls->Branch = 1;
+        controls->RegDst = 2;
+        controls->MemtoReg = 2;
+        controls->ALUSrc = 1; 
+        controls->ALUOp = 1;
+    }
+    // addi
+    else if (op == 0x8)
+    {    
+        controls->RegWrite = 1;
+        controls->ALUSrc = 1;
+    }
+    // slti
+    else if (op == 0xa)
+    {
+        controls->ALUOp = 2;
+        controls->RegWrite = 1;
+        controls->ALUSrc = 1;
+    }
+    // sltiu
+    else if (op == 0xb)
+    {
+        controls->ALUOp = 3;
+        controls->RegWrite = 1;
+        controls->ALUSrc = 1;
+    }
+    // lui
+    else if(op == 0xf)
+    {
+        controls->RegWrite = 1;
+        controls->ALUOp = 6;
+        controls->ALUSrc = 1;
+    }
+	// lw
+    else if (op == 0x23)
+    {
+        controls->RegWrite = 1;
+        controls->MemRead = 1;
+        controls->MemtoReg = 1;
+        controls->ALUSrc = 1;
+    }
+    // sw
+    else if (op == 0x2b)
+    {
+        controls->MemWrite = 1;
+        controls->RegDst = 2;
+        controls->MemtoReg = 2; 
+        controls->ALUSrc = 1;
     }
 	    
 // when none of the cases fit
